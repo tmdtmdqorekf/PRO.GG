@@ -14,13 +14,13 @@ window.onload = () => {
     });
     
     ipcRenderer.on('searchResult', (event, result) => {
+        console.log('Received searchResult:', result);
         if (result.error) {
             console.error('Error fetching player information:', result.error);
             summonerInfoDisplay.textContent = '플레이어 정보를 가져오지 못했습니다.';
             return;
         }
 
-        // Update the innerHTML directly without the html and body tags
         summonerInfoDisplay.innerHTML = `
             <div>
                 <h2>${result.summonerLevel}</h2>

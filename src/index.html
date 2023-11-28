@@ -4,45 +4,38 @@
     <meta charset="UTF-8">
     <title>PRO.GG</title>
     <link rel="stylesheet" href="index.css">
+    <script src="https://use.fontawesome.com/releases/v6.4.2/js/all.js"></script>
 </head>
 <body>
     <div id="app-container">
         <nav class="sidebar">
             <header>
                 <div class="image-text">
-                    <span class="image">
-                        <img src="logo.png" alt="logo">
-                    </span>
-
                     <div class="text header-text">
-                        <span class="name">CodingLab</span>
-                        <span class="profession">Web developer</span>
+                        <span class="name">PRO.GG</span>
                     </div>
             </header>
 
             <div class="menu-bar">
                 <div class="menu">
                     <li class="search-box">
-                        <i class='bx bx-search icon' ></i>
-                            <input type="text" placeholder="Search...">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input id="search-input" type="text" placeholder="플레이어 이름 + #KR1">
                     </li>
                     <ul class="menu-links">
                         <li class="nav-link">
                             <a href="#">
-                                <i class='bx bx-home-alt'></i>
                                 <span class="text nav-text">라인전 상성</span>
                             </a>
                         </li>
                         <li class="nav-link">
                             <a href="#">
-                                <i class='bx bx-home-alt'></i>
-                                <span class="text nav-text">Dashboard</span>
+                                <span class="text nav-text">정글 동선</span>
                             </a>
                         </li>
                         <li class="nav-link">
                             <a href="#">
-                                <i class='bx bx-home-alt'></i>
-                                <span class="text nav-text">Dashboard</span>
+                                <span class="text nav-text">설정</span>
                             </a>
                         </li>
                     </ul>
@@ -56,25 +49,13 @@
                         </a>
                     </li>
                 </div>
-                    
             </div>
         </nav>
 
         <section class="home">
             <div class="text">Dashboard</div>
+            <div id="summoner-info"></div>
         </section>
-        
-
-        <div id="search-and-data">
-            <div id="search-section">
-                <input id="search-input" type="text" placeholder="플레이어 이름 + #KR1">
-            </div>
-
-            <div id="data-section">
-                <div id="summoner-info">
-                </div>
-            </div>
-        </div>
     </div>
     <script>window.require = require;</script>
     <script src="index.js"></script>
