@@ -6,20 +6,74 @@
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
-    <div id="menu-section">
-        <ul>
-            <li>메뉴 1</li>
-            <li>메뉴 2</li>
-            <li>설정</li>
-        </ul>
-    </div>
+    <div id="app-container">
+        <nav class="sidebar">
+            <header>
+                <div class="image-text">
+                    <span class="image">
+                        <img src="logo.png" alt="logo">
+                    </span>
 
-    <div id="search-section">
-        <input id="search-input" type="text" placeholder="플레이어 이름 + #KR1">
-    </div>
+                    <div class="text header-text">
+                        <span class="name">CodingLab</span>
+                        <span class="profession">Web developer</span>
+                    </div>
+            </header>
 
-    <div id="data-section">
-        <div id="summoner-info">
+            <div class="menu-bar">
+                <div class="menu">
+                    <li class="search-box">
+                        <i class='bx bx-search icon' ></i>
+                            <input type="text" placeholder="Search...">
+                    </li>
+                    <ul class="menu-links">
+                        <li class="nav-link">
+                            <a href="#">
+                                <i class='bx bx-home-alt'></i>
+                                <span class="text nav-text">라인전 상성</span>
+                            </a>
+                        </li>
+                        <li class="nav-link">
+                            <a href="#">
+                                <i class='bx bx-home-alt'></i>
+                                <span class="text nav-text">Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="nav-link">
+                            <a href="#">
+                                <i class='bx bx-home-alt'></i>
+                                <span class="text nav-text">Dashboard</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="bottom-content">
+                    <li class="nav-link">
+                        <a href="#">
+                            <i class='bx bx-log-out icon'></i>
+                            <span class="text nav-text">Logout</span>
+                        </a>
+                    </li>
+                </div>
+                    
+            </div>
+        </nav>
+
+        <section class="home">
+            <div class="text">Dashboard</div>
+        </section>
+        
+
+        <div id="search-and-data">
+            <div id="search-section">
+                <input id="search-input" type="text" placeholder="플레이어 이름 + #KR1">
+            </div>
+
+            <div id="data-section">
+                <div id="summoner-info">
+                </div>
+            </div>
         </div>
     </div>
     <script>window.require = require;</script>

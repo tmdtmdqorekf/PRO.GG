@@ -1,39 +1,45 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
-const path = require('path');
+const axios = require('axios');
+require('dotenv').config();
 
-let mainWindow;
-
-const createWindow = () => {
-    mainWindow = new BrowserWindow({
+function createWindow () {
+    const win = new BrowserWindow({
         width: 1000,
         height: 750,
         webPreferences: {
-            preload: path.join(__dirname, 'src/index.js'),
-            nodeIntegration: true
+            nodeIntegration: true,
+            contextIsolation: false
         }
     });
 
-    mainWindow.loadFile('src/index.html');
+    win.loadFile('src/index.html');
+}
 
-    mainWindow.webContents.on('did-finish-load', () => {
-        mainWindow.webContents.send('onWebcontentsValue', 'on load...');
-    });
-};
+app.whenReady().then(createWindow);
 
-app.whenReady().then(() => {
-    createWindow();
+ipcMain.on('performSearch', async (event, inputValue) => {
+    const headers = {'X-Riot-Token': process.env.API_KEY};
+    const riotID = inputValue.match(/([^#]+)#([A-Z0-9]+)/);
+    const gameName = riotID[1];
+    const tagLine = riotID[2];
 
-    app.on('activate', () => {
-        if (BrowserWindow.getAllWindows().length === 0) createWindow();
-    });
+    try {
+        const response = await axios.get(`https://asia.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${gameName}/${tagLine}`, {
+            headers: headers,
+        });
 
-    ipcMain.on('menu-click', (event, menuIndex) => {
-        if (menuIndex === 2) {
-            mainWindow.loadFile('src/second.html');
-        }
-    });
-});
+        const summonerInfoByID = response.data;
+        const encryptedPUUID = summonerInfoByID.puuid;
 
-app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') app.quit();
+        const response2 = await axios.get(`https://kr.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/${encryptedPUUID}`, {
+            headers: headers
+        });
+
+        const summonerInfoByPUUID = response2.data;
+
+        event.sender.send('searchResult', summonerInfoByPUUID);
+    } catch (error) {
+        console.error('Error fetching player information:', error.message);
+        event.sender.send('searchResult', { error: error.message });
+    }
 });
