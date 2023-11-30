@@ -8,26 +8,24 @@ function createWindow () {
         height: 750,
         webPreferences: {
             nodeIntegration: true,
-            contextIsolation: false
+            contextIsolation: false,
         }
     });
 
     win.loadFile('src/index.html');
 }
 
-app.whenReady().then(createWindow);
+app.whenReady().then(() => {
+    createWindow();
 
-ipcMain.on('performSearch', async (event, inputValue) => {
-    const headers = {'X-Riot-Token': process.env.API_KEY};
-    const riotID = inputValue.match(/([^#]+)#([A-Z0-9]+)/);
+    ipcMain.on('performSearch', async (event, input) => {
+        const headers = {'X-Riot-Token': process.env.API_KEY};
+        const riotID = input.match(/([^#]+)#([A-Z0-9]+)/);
 
-    const gameName = riotID[1];
-    const tagLine = riotID[2];
+        const gameName = riotID[1];
+        const tagLine = riotID[2];
 
-    console.log(gameName);
-    console.log(tagLine);
-
-    try {
+        // 소환사 닉네임으로 정보 가져오기
         const response = await axios.get(`https://asia.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${gameName}/${tagLine}`, {
             headers: headers,
         });
@@ -36,15 +34,19 @@ ipcMain.on('performSearch', async (event, inputValue) => {
 
         const encryptedPUUID = summonerInfoByID.puuid;
 
+        // 소환사 puuid로 소환사 정보 가져오기
         const response2 = await axios.get(`https://kr.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/${encryptedPUUID}`, {
             headers: headers
         });
 
-        const summonerInfoByPUUID = response2.data;
+        const result = response2.data;
         
-        event.reply('searchResult', summonerInfoByPUUID);
-    } catch (error) {
-        console.error('Error fetching player information:', error.message);
-        event.reply('searchResult', { error: error.message });
-    }
+        // 소환사 정보 전송
+        event.reply('searchResult', result);
+    });
+
+    ipcMain.on('success', (event, arg) => {
+        console.log('new user: ', arg);
+        event.reply('success', arg);
+    });
 });

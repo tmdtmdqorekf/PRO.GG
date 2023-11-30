@@ -1,32 +1,54 @@
 const { ipcRenderer } = require('electron');
-
+const axios = require('axios');
 require('dotenv').config();
 
 window.onload = () => {
     const searchInput = document.getElementById('search-input');
-    const summonerInfoDisplay = document.getElementById('summoner-info');
+    const summonerIcon = document.getElementById('summoner-icon');
+    const summonerLevel = document.getElementById('summoner-level');
+    const summonerName = document.getElementById('summoner-name');
 
+    // 엔터로 검색
     searchInput.addEventListener('keyup', (event) => {
         if (event.keyCode === 13) {
-            const inputValue = searchInput.value;
-            ipcRenderer.send('performSearch', inputValue);
+            const input = searchInput.value;
+            ipcRenderer.send('performSearch', input);
         }
     });
     
-    ipcRenderer.on('searchResult', (event, result) => {
-        console.log('Received searchResult:', result);
+    // 소환사 정보 받아오기 (검색 결과)
+    ipcRenderer.on('searchResult', async (event, result) => {
         if (result.error) {
             console.error('Error fetching player information:', result.error);
-            summonerInfoDisplay.textContent = '플레이어 정보를 가져오지 못했습니다.';
+            summonerInfoDisplay.textContent = '검색 결과가 존재하지 않습니다.';
             return;
         }
 
-        summonerInfoDisplay.innerHTML = `
-            <div>
-                <h2>${result.summonerLevel}</h2>
-                <img src="http://ddragon.leagueoflegends.com/cdn/12.6.1/img/profileicon/${result.profileIconId}.png" alt="Profile Icon">
-                <h1>${result.name}</h1>
-            </div>
-        `;
+        console.log(result);
+
+        // 소환사 아이콘, 닉네임, 레벨 표시
+        summonerIcon.src = `http://ddragon.leagueoflegends.com/cdn/13.23.1/img/profileicon/${result.profileIconId}.png`;
+        summonerName.innerText = result.name;
+        summonerLevel.innerText = result.summonerLevel;
+        
+        // 실시간 게임 불러오기
+        const headers = {'X-Riot-Token': process.env.API_KEY};
+        const response = await axios.get(`https://kr.api.riotgames.com/lol/spectator/v4/active-games/by-summoner/${result.id}`, {
+            headers: headers
+        });
+
+        const activeGame = response.data;
+
+        console.log(activeGame);
+        
+        /* ipcRenderer.on('success', (event, arg) => {
+            console.log("aaaa");
+            console.log(arg);
+
+            championTopName.innerText = arg;
+        })
+
+        ipcRenderer.send('success', '탑 이름은' + result.name + '입니다.');
+        */
     });
 };

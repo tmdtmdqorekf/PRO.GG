@@ -197,3 +197,52 @@ header .image-text .header-text{
     color: var(--text-color);
     padding: 8px 40px;
 }
+
+.summoner-info-container{
+    display: flex;
+}
+
+.summoner-profile-container{
+    display: flex;
+    flex-direction: column;
+    margin: 20px 20px 20px 20px;
+}
+
+.profile-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.summoner-level {
+    font-size: 13px;
+    color: var(--text-color);
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.summoner-name {
+    font-size: 20px;
+    color: var(--text-color);
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5px;
+}
+
+
+.champion-container{
+    background: red;
+    padding: 10px;
+}
+
+.champion{
+    width: 400px;
+    height: 70px;
+    background: #FFF;
+    margin: 10px 0 10px 10px;
+}
